@@ -3,6 +3,8 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <base href="./" />
+  <!-- GitHub flat-file setup: all logos, posters, and MP4 files sit beside index.html. -->
   <meta name="description" content="A concise TD Garden bar workflow concept for automated bubble tea service using a two-person, cross-trained operating model." />
   <title>INFINITEA, Your Automated Bubble Tea Solution</title>
   <style>
@@ -524,7 +526,7 @@
     <header>
       <div class="shell topbar">
         <a class="brand brand-infinitea" href="#top" aria-label="Infinitea">
-          <img src="assets/logo-infinitea.png" alt="Infinitea logo" />
+          <img src="./logo-infinitea.png" alt="Infinitea logo" />
         </a>
 
         <nav class="nav" aria-label="Primary navigation">
@@ -534,7 +536,7 @@
         </nav>
 
         <div class="brand brand-mascon" aria-label="Mascon supply partner">
-          <div class="mascon-chip"><img src="assets/logo-mascon.png" alt="Mascon Strategic Supply Chain Services logo" /></div>
+          <div class="mascon-chip"><img src="./logo-mascon.png" alt="Mascon Strategic Supply Chain Services logo" /></div>
         </div>
       </div>
 
@@ -575,7 +577,7 @@
             <article class="video-card">
               <div class="video-wrap">
                 <span class="step-tag">01</span>
-                <video class="workflow-video" poster="assets/poster-1.jpg" muted autoplay loop playsinline controls preload="auto" controlslist="nodownload noplaybackrate"><source src="assets/video-1.mp4" type="video/mp4">Your browser does not support MP4 video.</video>
+                <video class="workflow-video" poster="./poster-1.jpg" muted autoplay loop playsinline controls preload="metadata" controlslist="nodownload noplaybackrate"><source src="./video-1.mp4" type="video/mp4">Your browser does not support MP4 video.</video><div class="media-error">Media could not be loaded. Confirm that this file and all media files are uploaded to the same GitHub directory, with the exact same lowercase filenames.</div>
               </div>
               <div class="video-copy">
                 <h3>Order &amp; Pickup</h3>
@@ -587,7 +589,7 @@
             <article class="video-card">
               <div class="video-wrap">
                 <span class="step-tag">02</span>
-                <video class="workflow-video" poster="assets/poster-2.jpg" muted autoplay loop playsinline controls preload="auto" controlslist="nodownload noplaybackrate"><source src="assets/video-2.mp4" type="video/mp4">Your browser does not support MP4 video.</video>
+                <video class="workflow-video" poster="./poster-2.jpg" muted autoplay loop playsinline controls preload="metadata" controlslist="nodownload noplaybackrate"><source src="./video-2.mp4" type="video/mp4">Your browser does not support MP4 video.</video><div class="media-error">Media could not be loaded. Confirm that this file and all media files are uploaded to the same GitHub directory, with the exact same lowercase filenames.</div>
               </div>
               <div class="video-copy">
                 <h3>Auto Dispense + Parallel Prep</h3>
@@ -599,7 +601,7 @@
             <article class="video-card">
               <div class="video-wrap">
                 <span class="step-tag">03</span>
-                <video class="workflow-video" poster="assets/poster-3.jpg" muted autoplay loop playsinline controls preload="auto" controlslist="nodownload noplaybackrate"><source src="assets/video-3.mp4" type="video/mp4">Your browser does not support MP4 video.</video>
+                <video class="workflow-video" poster="./poster-3.jpg" muted autoplay loop playsinline controls preload="metadata" controlslist="nodownload noplaybackrate"><source src="./video-3.mp4" type="video/mp4">Your browser does not support MP4 video.</video><div class="media-error">Media could not be loaded. Confirm that this file and all media files are uploaded to the same GitHub directory, with the exact same lowercase filenames.</div>
               </div>
               <div class="video-copy">
                 <h3>Shake, Finish &amp; Restock</h3>
@@ -713,7 +715,7 @@
             <div class="proof">Real footage / actual machine</div>
           </div>
           <div class="real-video-frame">
-            <video poster="assets/poster-real.jpg" controls playsinline preload="auto" controlslist="nodownload noplaybackrate"><source src="assets/real-world-demo.mp4" type="video/mp4">Your browser does not support MP4 video.</video>
+            <video poster="./poster-real.jpg" controls playsinline preload="metadata" controlslist="nodownload noplaybackrate"><source src="./real-world-demo.mp4" type="video/mp4">Your browser does not support MP4 video.</video><div class="media-error">Media could not be loaded. Confirm that this file and all media files are uploaded to the same GitHub directory, with the exact same lowercase filenames.</div>
           </div>
         </div>
       </section>
@@ -740,10 +742,13 @@
     }
 
     document.querySelectorAll('video').forEach((video) => {
-      video.addEventListener('error', () => {
+      const markError = () => {
         const frame = video.closest('.video-wrap, .real-video-frame');
         if (frame) frame.setAttribute('data-media-error', 'true');
-      });
+      };
+      video.addEventListener('error', markError);
+      const source = video.querySelector('source');
+      if (source) source.addEventListener('error', markError);
     });
 
     replayButton.addEventListener('click', replayAll);
