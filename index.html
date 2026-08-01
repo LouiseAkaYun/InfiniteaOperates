@@ -1,0 +1,725 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="description" content="A concise TD Garden bar workflow concept for automated bubble tea service using a two-person, cross-trained operating model." />
+  <title>INFINITEA, Your Automated Bubble Tea Solution</title>
+  <style>
+    :root {
+      --ink: #101010;
+      --muted: #676767;
+      --canvas: #dededb;
+      --paper: #fbfbfa;
+      --soft: #f0f0ed;
+      --line: #d6d6d1;
+      --green: #34583d;
+      --green-dark: #203a28;
+      --gold: #c2a66f;
+      --blue: #24bfff;
+      --radius: 14px;
+      --page-width: 1420px;
+    }
+
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0;
+      color: var(--ink);
+      background: var(--canvas);
+      font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+      line-height: 1.45;
+      -webkit-font-smoothing: antialiased;
+      text-rendering: optimizeLegibility;
+    }
+
+    button, input { font: inherit; }
+    a { color: inherit; text-decoration: none; }
+
+    .page {
+      width: min(var(--page-width), calc(100% - 44px));
+      margin: 28px auto;
+      overflow: hidden;
+      background: var(--paper);
+      border: 1px solid rgba(16,16,16,.08);
+      border-radius: 18px;
+      box-shadow: 0 24px 80px rgba(0,0,0,.10);
+    }
+
+    .shell { width: min(1240px, calc(100% - 64px)); margin: 0 auto; }
+
+    .topbar {
+      display: grid;
+      grid-template-columns: 1fr auto 1fr;
+      align-items: center;
+      gap: 28px;
+      padding: 24px 0 18px;
+      border-bottom: 1px solid var(--line);
+    }
+    .brand { display: flex; align-items: center; min-width: 0; }
+    .brand-infinitea { justify-content: flex-start; }
+    .brand-infinitea img {
+      width: 92px;
+      height: 72px;
+      object-fit: contain;
+      object-position: center;
+    }
+    .brand-mascon { justify-content: flex-end; }
+    .mascon-chip {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-width: 188px;
+      height: 54px;
+      padding: 5px 15px;
+      border-radius: 999px;
+      background: #0a0d10;
+      border: 1px solid rgba(36,191,255,.26);
+    }
+    .mascon-chip img {
+      width: 160px;
+      height: 38px;
+      object-fit: contain;
+    }
+    .nav {
+      display: flex;
+      justify-content: center;
+      gap: 34px;
+      font-size: .67rem;
+      font-weight: 700;
+      letter-spacing: .12em;
+      text-transform: uppercase;
+      white-space: nowrap;
+    }
+    .nav a { position: relative; padding: 10px 0; }
+    .nav a::after {
+      content: "";
+      position: absolute;
+      left: 0;
+      bottom: 5px;
+      width: 0;
+      height: 1px;
+      background: var(--ink);
+      transition: width .2s ease;
+    }
+    .nav a:hover::after { width: 100%; }
+
+    .hero {
+      min-height: 620px;
+      display: flex;
+      align-items: center;
+      padding: 76px 0 84px;
+    }
+    .hero-grid {
+      display: grid;
+      grid-template-columns: minmax(0, 1.48fr) minmax(280px, .52fr);
+      gap: 74px;
+      align-items: end;
+    }
+    .kicker {
+      margin: 0 0 20px;
+      font-size: .7rem;
+      font-weight: 800;
+      letter-spacing: .19em;
+      text-transform: uppercase;
+    }
+    h1 {
+      max-width: 1030px;
+      margin: 0;
+      font-size: clamp(4.2rem, 8.2vw, 8.7rem);
+      line-height: .88;
+      letter-spacing: -.075em;
+      font-weight: 760;
+    }
+    .hero-copy {
+      max-width: 720px;
+      margin: 30px 0 0;
+      color: var(--muted);
+      font-size: clamp(1.02rem, 1.65vw, 1.34rem);
+    }
+    .hero-side {
+      border-top: 2px solid var(--ink);
+      padding-top: 18px;
+    }
+    .hero-side-label {
+      margin-bottom: 22px;
+      color: var(--muted);
+      font-size: .66rem;
+      font-weight: 800;
+      letter-spacing: .15em;
+      text-transform: uppercase;
+    }
+    .hero-stat {
+      display: grid;
+      grid-template-columns: auto 1fr;
+      gap: 18px;
+      align-items: baseline;
+      padding: 14px 0;
+      border-bottom: 1px solid var(--line);
+    }
+    .hero-stat strong {
+      min-width: 92px;
+      font-size: 1.9rem;
+      letter-spacing: -.055em;
+      line-height: 1;
+    }
+    .hero-stat span { color: var(--muted); font-size: .83rem; }
+    .pilot-note { margin: 18px 0 0; color: #858585; font-size: .7rem; }
+
+    section { padding: 96px 0; }
+    .section-head {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) minmax(260px, 430px);
+      gap: 50px;
+      align-items: end;
+      margin-bottom: 42px;
+    }
+    .section-index {
+      display: block;
+      margin-bottom: 16px;
+      font-size: .65rem;
+      font-weight: 800;
+      letter-spacing: .18em;
+      text-transform: uppercase;
+    }
+    .section-head h2, .real-copy h2 {
+      margin: 0;
+      font-size: clamp(2.65rem, 5.2vw, 5.8rem);
+      line-height: .91;
+      letter-spacing: -.067em;
+      font-weight: 730;
+    }
+    .section-head p { margin: 0; color: var(--muted); font-size: .98rem; }
+    .head-actions { display: flex; flex-direction: column; align-items: flex-start; gap: 18px; }
+    .replay {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      border: 1px solid var(--ink);
+      border-radius: 999px;
+      background: transparent;
+      padding: 10px 16px;
+      color: var(--ink);
+      cursor: pointer;
+      font-size: .71rem;
+      font-weight: 800;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+      transition: background .2s ease, color .2s ease;
+    }
+    .replay:hover { color: #fff; background: var(--ink); }
+
+    #workflow { border-top: 1px solid var(--line); }
+    .video-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 20px;
+    }
+    .video-card {
+      min-width: 0;
+      border-top: 1px solid var(--ink);
+      background: #fff;
+    }
+    .video-wrap {
+      position: relative;
+      aspect-ratio: 3 / 4;
+      overflow: hidden;
+      background: #111;
+    }
+    .video-wrap video {
+      width: 100%;
+      height: 100%;
+      display: block;
+      object-fit: cover;
+    }
+    .step-tag {
+      position: absolute;
+      top: 16px;
+      left: 16px;
+      z-index: 2;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 38px;
+      height: 38px;
+      border-radius: 50%;
+      background: rgba(255,255,255,.92);
+      color: var(--ink);
+      border: 1px solid rgba(16,16,16,.2);
+      font-size: .72rem;
+      font-weight: 800;
+      backdrop-filter: blur(8px);
+    }
+    .video-copy { padding: 22px 4px 6px; }
+    .video-copy h3 {
+      margin: 0 0 9px;
+      font-size: 1.08rem;
+      letter-spacing: -.025em;
+    }
+    .video-copy p {
+      min-height: 48px;
+      margin: 0;
+      color: var(--muted);
+      font-size: .87rem;
+    }
+    .time-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      margin-top: 19px;
+      padding-top: 13px;
+      border-top: 1px solid var(--line);
+      font-size: .71rem;
+      font-weight: 800;
+      letter-spacing: .04em;
+      text-transform: uppercase;
+    }
+    .time-row strong { color: var(--green); font-size: .84rem; }
+
+    .model-section {
+      color: #fff;
+      background: #111;
+    }
+    .model-section .section-index { color: var(--gold); }
+    .model-section .section-head p { color: rgba(255,255,255,.62); }
+    .model-layout {
+      display: grid;
+      grid-template-columns: .72fr 1.55fr;
+      gap: 34px;
+      align-items: start;
+    }
+    .metric-panel {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      border-top: 1px solid rgba(255,255,255,.24);
+      border-left: 1px solid rgba(255,255,255,.24);
+    }
+    .metric-card {
+      min-height: 168px;
+      padding: 22px;
+      border-right: 1px solid rgba(255,255,255,.24);
+      border-bottom: 1px solid rgba(255,255,255,.24);
+    }
+    .metric-card small {
+      display: block;
+      color: rgba(255,255,255,.52);
+      font-size: .62rem;
+      font-weight: 800;
+      letter-spacing: .12em;
+      text-transform: uppercase;
+    }
+    .metric-card strong {
+      display: block;
+      margin-top: 18px;
+      font-size: clamp(2.2rem, 4.4vw, 4.5rem);
+      line-height: .88;
+      letter-spacing: -.07em;
+    }
+    .metric-card p { margin: 13px 0 0; color: rgba(255,255,255,.6); font-size: .76rem; }
+    .roles-note {
+      margin-top: 22px;
+      padding: 18px 0 0;
+      border-top: 1px solid rgba(255,255,255,.26);
+      color: rgba(255,255,255,.7);
+      font-size: .82rem;
+    }
+
+    .gantt-card {
+      overflow: hidden;
+      padding: 24px;
+      color: var(--ink);
+      background: #f8f8f5;
+      border-radius: 2px;
+    }
+    .gantt-top {
+      display: flex;
+      justify-content: space-between;
+      gap: 20px;
+      align-items: baseline;
+      margin-bottom: 20px;
+    }
+    .gantt-top strong { font-size: .98rem; }
+    .gantt-top span { color: var(--muted); font-size: .7rem; }
+    .timeline {
+      display: grid;
+      grid-template-columns: 122px repeat(12, minmax(28px, 1fr));
+      gap: 0;
+      margin-bottom: 8px;
+      color: #878787;
+      font-size: .62rem;
+    }
+    .timeline span { text-align: center; }
+    .timeline span:first-child { text-align: left; }
+    .lane {
+      display: grid;
+      grid-template-columns: 122px minmax(0, 1fr);
+      align-items: center;
+      min-height: 56px;
+      border-top: 1px solid #dcdcd7;
+    }
+    .lane-name {
+      padding-right: 12px;
+      font-size: .68rem;
+      font-weight: 800;
+      line-height: 1.2;
+      letter-spacing: .02em;
+    }
+    .track {
+      position: relative;
+      display: grid;
+      grid-template-columns: repeat(24, 1fr);
+      align-items: center;
+      height: 38px;
+      background-image: linear-gradient(to right, rgba(16,16,16,.08) 1px, transparent 1px);
+      background-size: calc(100% / 12) 100%;
+    }
+    .bar {
+      z-index: 2;
+      grid-column: var(--start) / span var(--span);
+      height: 27px;
+      display: flex;
+      align-items: center;
+      padding: 0 8px;
+      overflow: hidden;
+      white-space: nowrap;
+      font-size: .61rem;
+      font-weight: 800;
+      color: #fff;
+      background: var(--green);
+    }
+    .bar.gold { color: #1c170d; background: var(--gold); }
+    .bar.dark { background: #111; }
+    .bar.soft {
+      color: #4c4c4a;
+      background: repeating-linear-gradient(135deg, #d9d9d4, #d9d9d4 7px, #eeeeea 7px, #eeeeea 14px);
+      border: 1px dashed #898984;
+    }
+    .gantt-foot {
+      display: flex;
+      gap: 18px;
+      flex-wrap: wrap;
+      margin-top: 18px;
+      color: var(--muted);
+      font-size: .67rem;
+    }
+    .legend-item { display: inline-flex; align-items: center; gap: 7px; }
+    .dot { width: 9px; height: 9px; background: var(--green); }
+    .dot.gold { background: var(--gold); }
+    .dot.soft { background: #d9d9d4; border: 1px dashed #898984; }
+
+    .real-section { background: var(--soft); }
+    .real-layout {
+      display: grid;
+      grid-template-columns: .82fr 1.18fr;
+      gap: 70px;
+      align-items: center;
+    }
+    .real-copy p { max-width: 470px; margin: 24px 0 0; color: var(--muted); font-size: .98rem; }
+    .real-copy .proof {
+      display: inline-flex;
+      align-items: center;
+      gap: 9px;
+      margin-top: 28px;
+      padding-top: 16px;
+      border-top: 1px solid var(--ink);
+      font-size: .68rem;
+      font-weight: 800;
+      letter-spacing: .1em;
+      text-transform: uppercase;
+    }
+    .proof::before { content: ""; width: 8px; height: 8px; border-radius: 50%; background: var(--green); }
+    .real-video-frame {
+      width: min(460px, 100%);
+      justify-self: center;
+      padding: 8px;
+      background: #111;
+    }
+    .real-video-frame video {
+      width: 100%;
+      display: block;
+      aspect-ratio: 9 / 16;
+      object-fit: cover;
+      background: #000;
+    }
+
+    footer {
+      padding: 28px 0 34px;
+      border-top: 1px solid var(--line);
+      color: #757575;
+      font-size: .68rem;
+    }
+    .footer-row {
+      display: flex;
+      justify-content: space-between;
+      gap: 24px;
+      align-items: flex-start;
+    }
+    .footer-row strong { color: var(--ink); letter-spacing: .08em; text-transform: uppercase; }
+
+    @media (max-width: 980px) {
+      .topbar { grid-template-columns: 1fr 1fr; }
+      .nav { grid-column: 1 / -1; grid-row: 2; order: 3; }
+      .hero-grid, .model-layout, .real-layout { grid-template-columns: 1fr; }
+      .hero { min-height: auto; }
+      .hero-side { max-width: 520px; }
+      .section-head { grid-template-columns: 1fr; }
+      .video-grid {
+        display: flex;
+        overflow-x: auto;
+        scroll-snap-type: x mandatory;
+        padding-bottom: 15px;
+      }
+      .video-card { min-width: min(78vw, 370px); scroll-snap-align: start; }
+    }
+
+    @media (max-width: 660px) {
+      .page { width: calc(100% - 18px); margin: 9px auto; border-radius: 12px; }
+      .shell { width: calc(100% - 30px); }
+      .topbar { padding-top: 16px; gap: 12px; }
+      .brand-infinitea img { width: 72px; height: 58px; }
+      .mascon-chip { min-width: 142px; height: 44px; padding: 4px 10px; }
+      .mascon-chip img { width: 124px; height: 30px; }
+      .nav { gap: 20px; justify-content: flex-start; overflow-x: auto; }
+      .hero { padding: 58px 0 64px; }
+      h1 { font-size: clamp(3.15rem, 15vw, 5.5rem); }
+      section { padding: 70px 0; }
+      .metric-panel { grid-template-columns: 1fr 1fr; }
+      .metric-card { min-height: 144px; padding: 16px; }
+      .gantt-card { overflow-x: auto; padding: 18px 15px; }
+      .gantt-top, .gantt-foot, .timeline, .lane { min-width: 580px; }
+      .timeline, .lane { grid-template-columns: 96px minmax(470px, 1fr); }
+      .footer-row { flex-direction: column; }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      html { scroll-behavior: auto; }
+      * { transition: none !important; }
+    }
+  </style>
+</head>
+<body>
+  <div class="page">
+    <header>
+      <div class="shell topbar">
+        <a class="brand brand-infinitea" href="#top" aria-label="Infinitea">
+          <img src="assets/logo-infinitea.png" alt="Infinitea logo" />
+        </a>
+
+        <nav class="nav" aria-label="Primary navigation">
+          <a href="#workflow">Workflow</a>
+          <a href="#operating-model">Operating Model</a>
+          <a href="#real-world">Real Demo</a>
+        </nav>
+
+        <div class="brand brand-mascon" aria-label="Mascon supply partner">
+          <div class="mascon-chip"><img src="assets/logo-mascon.png" alt="Mascon Strategic Supply Chain Services logo" /></div>
+        </div>
+      </div>
+
+      <div class="hero" id="top">
+        <div class="shell hero-grid">
+          <div>
+            <p class="kicker">Automated beverage operations concept</p>
+            <h1>INFINITEA, Your Automated Bubble Tea Solution</h1>
+            <p class="hero-copy">A compact two-person workflow designed to keep a TD Garden bar moving—fast pickup at the counter, automated drink production behind it.</p>
+          </div>
+
+          <aside class="hero-side" aria-label="Estimated workflow metrics">
+            <div class="hero-side-label">Illustrative operating metrics</div>
+            <div class="hero-stat"><strong>≈6 sec</strong><span>Guest-facing pickup from the premade drink zone</span></div>
+            <div class="hero-stat"><strong>≈22 sec</strong><span>Start-to-shelf replenishment lead time</span></div>
+            <div class="hero-stat"><strong>≈8 sec</strong><span>Estimated steady-state output interval</span></div>
+            <p class="pilot-note">Planning estimates for discussion. Final timing should be validated during an on-site pilot.</p>
+          </aside>
+        </div>
+      </div>
+    </header>
+
+    <main>
+      <section id="workflow">
+        <div class="shell">
+          <div class="section-head">
+            <div>
+              <span class="section-index">01 / Workflow</span>
+              <h2>Three connected moments at one bar.</h2>
+            </div>
+            <div class="head-actions">
+              <p>The front counter serves immediately from a small premade buffer while the production station replenishes drinks in parallel.</p>
+              <button class="replay" id="replayAll" type="button" aria-label="Replay all three workflow videos"><span aria-hidden="true">↻</span> Replay all</button>
+            </div>
+          </div>
+
+          <div class="video-grid">
+            <article class="video-card">
+              <div class="video-wrap">
+                <span class="step-tag">01</span>
+                <video class="workflow-video" src="assets/video-1.mp4" poster="assets/poster-1.jpg" muted autoplay loop playsinline preload="metadata"></video>
+              </div>
+              <div class="video-copy">
+                <h3>Order &amp; Pickup</h3>
+                <p>The cashier confirms the order and hands off a drink already staged in the premade zone.</p>
+                <div class="time-row"><span>Guest-facing time</span><strong>≈6 sec</strong></div>
+              </div>
+            </article>
+
+            <article class="video-card">
+              <div class="video-wrap">
+                <span class="step-tag">02</span>
+                <video class="workflow-video" src="assets/video-2.mp4" poster="assets/poster-2.jpg" muted autoplay loop playsinline preload="metadata"></video>
+              </div>
+              <div class="video-copy">
+                <h3>Auto Dispense + Parallel Prep</h3>
+                <p>The machine dispenses independently while the team member prepares the next ice-filled serving cup.</p>
+                <div class="time-row"><span>Automated dispense</span><strong>≈6 sec</strong></div>
+              </div>
+            </article>
+
+            <article class="video-card">
+              <div class="video-wrap">
+                <span class="step-tag">03</span>
+                <video class="workflow-video" src="assets/video-3.mp4" poster="assets/poster-3.jpg" muted autoplay loop playsinline preload="metadata"></video>
+              </div>
+              <div class="video-copy">
+                <h3>Shake, Finish &amp; Restock</h3>
+                <p>The drink is automatically shaken, poured, sealed and returned to the premade zone as another drink is handed off.</p>
+                <div class="time-row"><span>Finish + restock</span><strong>≈10–14 sec</strong></div>
+              </div>
+            </article>
+          </div>
+        </div>
+      </section>
+
+      <section class="model-section" id="operating-model">
+        <div class="shell">
+          <div class="section-head">
+            <div>
+              <span class="section-index">02 / Operating model</span>
+              <h2>Parallel work. Flexible roles.</h2>
+            </div>
+            <p>Both employees are cross-trained. Either person can cover the POS or production station as demand and the premade buffer change.</p>
+          </div>
+
+          <div class="model-layout">
+            <div>
+              <div class="metric-panel">
+                <div class="metric-card">
+                  <small>Replenishment lead time</small>
+                  <strong>≈22s</strong>
+                  <p>From loading the shaker cup to placing the sealed drink on the shelf.</p>
+                </div>
+                <div class="metric-card">
+                  <small>Steady-state cycle</small>
+                  <strong>≈8s</strong>
+                  <p>Estimated output interval once dispensing, shaking and finishing are pipelined.</p>
+                </div>
+                <div class="metric-card">
+                  <small>Example peak takt</small>
+                  <strong>10s</strong>
+                  <p>120 drinks across a 20-minute peak window.</p>
+                </div>
+                <div class="metric-card">
+                  <small>Illustrative capacity</small>
+                  <strong>150</strong>
+                  <p>Theoretical drinks per 20 minutes at an 8-second cycle.</p>
+                </div>
+              </div>
+              <div class="roles-note"><strong>Cross-trained allocation:</strong> Staff A assists production between guest orders; Staff B can cover the register whenever the premade buffer is healthy.</div>
+            </div>
+
+            <div class="gantt-card" aria-label="Illustrative 22-second beverage workflow Gantt chart">
+              <div class="gantt-top">
+                <strong>Illustrative task overlap</strong>
+                <span>Seconds from the start of one replenishment cycle</span>
+              </div>
+              <div class="timeline" aria-hidden="true">
+                <span>Lane</span><span>0</span><span>2</span><span>4</span><span>6</span><span>8</span><span>10</span><span>12</span><span>14</span><span>16</span><span>18</span><span>20</span><span>22</span>
+              </div>
+
+              <div class="lane">
+                <div class="lane-name">Staff A<br>front counter</div>
+                <div class="track">
+                  <div class="bar" style="--start:1;--span:2">Confirm</div>
+                  <div class="bar gold" style="--start:3;--span:4">Pickup + handoff</div>
+                  <div class="bar soft" style="--start:7;--span:14">Next guest / assist production</div>
+                  <div class="bar gold" style="--start:21;--span:2">Handoff</div>
+                </div>
+              </div>
+
+              <div class="lane">
+                <div class="lane-name">Staff B<br>production</div>
+                <div class="track">
+                  <div class="bar" style="--start:1;--span:3">Load + start</div>
+                  <div class="bar" style="--start:4;--span:4">Ice prep</div>
+                  <div class="bar" style="--start:15;--span:3">Open + pour</div>
+                  <div class="bar" style="--start:18;--span:3">Seal</div>
+                  <div class="bar gold" style="--start:21;--span:2">Restock</div>
+                </div>
+              </div>
+
+              <div class="lane">
+                <div class="lane-name">Milk tea<br>machine</div>
+                <div class="track"><div class="bar dark" style="--start:4;--span:6">Automatic dispense</div></div>
+              </div>
+
+              <div class="lane">
+                <div class="lane-name">Automatic<br>shaker</div>
+                <div class="track"><div class="bar dark" style="--start:10;--span:5">Automatic shake</div></div>
+              </div>
+
+              <div class="lane">
+                <div class="lane-name">Sealing<br>machine</div>
+                <div class="track"><div class="bar dark" style="--start:18;--span:3">Automatic seal</div></div>
+              </div>
+
+              <div class="gantt-foot">
+                <span class="legend-item"><i class="dot"></i>Manual task</span>
+                <span class="legend-item"><i class="dot gold"></i>Guest handoff / shelf movement</span>
+                <span class="legend-item"><i class="dot soft"></i>Flexible cross-trained time</span>
+                <span class="legend-item"><i class="dot" style="background:#111"></i>Machine time</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="real-section" id="real-world">
+        <div class="shell real-layout">
+          <div class="real-copy">
+            <span class="section-index">03 / Real-world operation</span>
+            <h2>See the actual machine make a drink.</h2>
+            <p>This footage shows the real dispensing workflow—not a generated concept—so the operating behavior can be evaluated directly.</p>
+            <div class="proof">Real footage / actual machine</div>
+          </div>
+          <div class="real-video-frame">
+            <video src="assets/real-world-demo.mp4" poster="assets/poster-real.jpg" controls playsinline preload="metadata"></video>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <footer>
+      <div class="shell footer-row">
+        <strong>INFINITEA × MASCON</strong>
+        <span>Concept timing and capacity are illustrative estimates and should be validated through an on-site pilot, menu mix review and peak-demand observation.</span>
+      </div>
+    </footer>
+  </div>
+
+  <script>
+    const workflowVideos = [...document.querySelectorAll('.workflow-video')];
+    const replayButton = document.getElementById('replayAll');
+
+    function replayAll() {
+      workflowVideos.forEach((video) => {
+        video.currentTime = 0;
+        const playPromise = video.play();
+        if (playPromise && typeof playPromise.catch === 'function') playPromise.catch(() => {});
+      });
+    }
+
+    replayButton.addEventListener('click', replayAll);
+    window.addEventListener('load', () => setTimeout(replayAll, 250));
+  </script>
+</body>
+</html>
