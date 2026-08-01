@@ -1,6 +1,12 @@
-INFINITEA — TD Garden Automated Bubble Tea Workflow
+TD Garden Milk Tea Workflow
 
-Open index.html in a modern browser.
-All videos, posters, and logos are stored locally in the assets folder, so the page can be hosted as a static site on Netlify, GitHub Pages, or a standard web server.
+Option 1 — easiest:
+Open td_garden_milk_tea_workflow_standalone.html.
+All logos, posters, and videos are embedded inside that one file.
 
-The workflow timing and capacity values are illustrative planning estimates and should be validated during a live pilot.
+Option 2 — normal website package:
+Keep index.html and the assets folder together.
+Upload the entire folder to Netlify, GitHub Pages, or another static host.
+Do not move index.html away from the assets folder.
+
+The videos are H.264 MP4 and include manual controls as a fallback if autoplay is blocked.
